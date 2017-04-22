@@ -1,5 +1,9 @@
 import smbus
 import math
+import RPi.GPIO as GPIO, time, os
+
+DEBUG = 1
+GPIO.setmode(GPIO.BCM)
 
 # Power management registers
 power_mgmt_1 = 0x6b
@@ -32,12 +36,27 @@ def get_x_rotation(x,y,z):
     radians = math.atan2(y, dist(x,z))
     return math.degrees(radians)
 ################################################################################################################################
+def RCtime (RCpin):
+    reading = 0
+    GPIO.setup(RCpin, GPIO.OUT)
+    GPIO.output(RCpin, GPIO.LOW)
+    time.sleep(0.2)
+
+    GPIO.setup(RCpin, GPIO.IN)
+    # This takes about 1 millisecond per loop cycle
+    while (GPIO.input(RCpin) == GPIO.LOW):
+        reading += 1
+    return reading
+################################################################################################################################
 bus = smbus.SMBus(1) # or bus = smbus.SMBus(1) for Revision 2 boards
 address = 0x68       # This is the address value read via the i2cdetect command
 
 # Now wake the 6050 up as it starts in sleep mode
 bus.write_byte_data(address, power_mgmt_1, 0)
 
+
+while True:
+    print (RCtime(27)) # Read RC timing using pin #27
 def standBY():
     while fsr_active == true:
         gyro_xout = read_word_2c(0x43)
