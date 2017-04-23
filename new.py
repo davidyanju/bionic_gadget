@@ -24,7 +24,6 @@ def read_word_2c(adr):
         return -((65535 - val) + 1)
     else:
         return val
-
 def dist(a,b):
     return math.sqrt((a*a)+(b*b))
 
@@ -54,32 +53,19 @@ address = 0x68       # This is the address value read via the i2cdetect command
 # Now wake the 6050 up as it starts in sleep mode
 bus.write_byte_data(address, power_mgmt_1, 0)
 
-
-while True:
-    print (RCtime(27)) # Read RC timing using pin #27
-def standBY():
+def standBy():
     while fsr_active == true:
         gyro_xout = read_word_2c(0x43)
-        #gyro_yout = read_word_2c(0x45)
-        #gyro_zout = read_word_2c(0x47)
-        #print "gyro data"
-        #print "---------"
-        #print "gyro_xout: ", gyro_xout, " scaled: ", (gyro_xout / 131)
-        #print "gyro_yout: ", gyro_yout, " scaled: ", (gyro_yout / 131)
-        #print "gyro_zout: ", gyro_zout, " scaled: ", (gyro_zout / 131)
+        gyro_yout = read_word_2c(0x45)
+        gyro_zout = read_word_2c(0x47)
+        print "gyro data"
+        print "---------"
+        
         
 def actMode():
     print
     print "accelerometer data"
     print "------------------"
-
-    accel_xout = read_word_2c(0x3b)
-    accel_yout = read_word_2c(0x3d)
-    accel_zout = read_word_2c(0x3f)
-
-    accel_xout_scaled = accel_xout / 16384.0
-    accel_yout_scaled = accel_yout / 16384.0
-    accel_zout_scaled = accel_zout / 16384.0
 
     #get acceleration in the x direction
     def get_x_accel():
@@ -111,3 +97,7 @@ def actMode():
             print "down",newAclrn
 
     # standy mode
+while True:
+    fsr = RCtime(27)
+    if fsr = true:
+        standBy()
